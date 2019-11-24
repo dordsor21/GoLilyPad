@@ -13,6 +13,7 @@ import (
 	mc112 "github.com/LilyPad/GoLilyPad/packet/minecraft/v112"
 	mc1121 "github.com/LilyPad/GoLilyPad/packet/minecraft/v1121"
 	mc113 "github.com/LilyPad/GoLilyPad/packet/minecraft/v113"
+	mc114 "github.com/LilyPad/GoLilyPad/packet/minecraft/v114"
 	mc17 "github.com/LilyPad/GoLilyPad/packet/minecraft/v17"
 	mc18 "github.com/LilyPad/GoLilyPad/packet/minecraft/v18"
 	mc19 "github.com/LilyPad/GoLilyPad/packet/minecraft/v19"
@@ -163,7 +164,7 @@ func (this *Session) SetAuthenticated(result bool) {
 
 	event := eventSessionLogin{
 		eventSessionCancellable: eventSessionCancellable{eventSession: eventSession{this}},
-		reason: "",
+		reason:                  "",
 	}
 	eventBus := this.server.apiEventBus
 	eventBus.fireEventSession(eventBus.sessionLogin, &event)
@@ -309,7 +310,17 @@ func (this *Session) handlePacket(packet packet.Packet) (err error) {
 					err = errors.New(fmt.Sprintf("Protocol version does not match: %d", this.protocolVersion))
 					return
 				}
-				if this.protocolVersion >= mc113.VersionNum02 {
+				if this.protocolVersion >= mc114.VersionNum04 {
+					this.protocol = mc114.Version04
+				} else if this.protocolVersion >= mc114.VersionNum03 {
+					this.protocol = mc114.Version03
+				} else if this.protocolVersion >= mc114.VersionNum02 {
+					this.protocol = mc114.Version02
+				} else if this.protocolVersion >= mc114.VersionNum01 {
+					this.protocol = mc114.Version01
+				} else if this.protocolVersion >= mc114.VersionNum {
+					this.protocol = mc114.Version
+				} else if this.protocolVersion >= mc113.VersionNum02 {
 					this.protocol = mc113.Version02
 				} else if this.protocolVersion >= mc113.VersionNum01 {
 					this.protocol = mc113.Version01
