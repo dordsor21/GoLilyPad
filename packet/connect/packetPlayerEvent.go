@@ -65,5 +65,4 @@ func (this *packetPlayerEventCodec) Encode(writer io.Writer, encode packet.Packe
 	}
 	err = packet.WriteUUID(writer, packetPlayerEvent.PlayerUUID)
 	return
-	return
 }
